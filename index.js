@@ -3,6 +3,13 @@
 		var editMode = "";		//편집여부
 		var sortType = "desc";	//정렬타입
 		
+		
+		//숫자만numberonly='true'
+		$(document).on("keyup", ".numberOnly", function() {
+			$(this).val( $(this).val().replace(/[^0-9]/gi,"") );
+		});
+
+		
 		/* 버튼 표시 또는 숨김 처리 */
 		var btnShowOrHide = function(){
 			$("[name=listArea] button").animate({opacity: '1'}, 1000);
@@ -197,7 +204,7 @@
         	if(editMode == ""){
 	        	 var $tr = $("<tr>"
 	             +   "<td class=\"text-center\"><input style=\"width:150px\" type=\"text\" name=\"name\" placeholder=\"이름\"/></td>"
-	             +   "<td class=\"text-center\"><input style=\"width:40px\" type=\"text\" name=\"age\" placeholder=\"나이\" maxlength=\"2\"/></td>"
+	             +   "<td class=\"text-center\"><input style=\"width:40px\" type=\"text\" name=\"age\" placeholder=\"나이\" maxlength=\"2\" class=\"numberOnly\"/></td>"
 	             +   "<td class=\"text-center\"><input style=\"width:210px\" type=\"text\" name=\"email\" placeholder=\"이메일\"/></td>"
 	             +   "<td class=\"text-center\"><input style=\"width:150px\" type=\"text\" name=\"phone\" placeholder=\"전화번호\"/></td>"
 	             +   "<td class=\"text-center\"><input style=\"width:340px\" type=\"text\" name=\"company\" placeholder=\"회사\"/></td>"
