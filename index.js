@@ -3,12 +3,10 @@
 		var editMode = "";		//편집여부
 		var sortType = "desc";	//정렬타입
 		
-		
 		//숫자만numberonly='true'
 		$(document).on("keyup", ".numberOnly", function() {
 			$(this).val( $(this).val().replace(/[^0-9]/gi,"") );
 		});
-
 		
 		/* 버튼 표시 또는 숨김 처리 */
 		var btnShowOrHide = function(){
@@ -56,13 +54,13 @@
 				               .sortBy('age')
 				               .reverse()
 				               .value();
-	        	return makePagingData(sortingData, npage)
+	        	return makePagingData(sortingData, npage);
 	        	
 	        }else{
 	        	sortingData = _.chain(findData)
 				               .sortBy('age')
 				               .value();
-				return makePagingData(sortingData, npage)
+				return makePagingData(sortingData, npage);
 				
 	        }
 	        
