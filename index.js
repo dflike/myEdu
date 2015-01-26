@@ -72,7 +72,6 @@
 		/* 페이징  추가 */
 		var recordCnt = 3;
 		var makePagingData = function(sortingData , nPage){
-			console.log("nPage==",nPage);
 			$(".pagination").html("");
 			
 			var startNum = (nPage * recordCnt) - recordCnt;
@@ -137,9 +136,9 @@
                 /* 삭제 */
                 $tr.find("button[name=delete]").click(function(){
                 	if(confirm("삭제하시겠습니까?")){
-	                	data = _.reject(data, function(rejObj){ 
+	                	data = _.filter(data, function(rejObj){ 
 	                		
-	                		return _.isEqual(rejObj, obj); 
+	                		return rejObj._id != obj._id; 
 	                	});
 	                	
 	                	$("button[name=listRender]").trigger('click');
