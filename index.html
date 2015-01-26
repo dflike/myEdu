@@ -26,13 +26,17 @@
 
         <div name="listArea" class="well" style="background-color:#FFFFFF">
 	            <p>
-	            	<button class="btn btn-sm btn-primary" name="listRender"><i class="glyphicon glyphicon-search"></i> 조회</button>
-	            	<button class="btn btn-sm btn-primary" name="addData"><i class="glyphicon glyphicon-plus"></i> 등록</button>
+	            	<ul class="nav nav-pills" role="tablist">
+		             	<li> 나이 : <input type="text" name="schAge" style="width:60px" value="" maxlength="3"/></li>
+		            	<li> <button class="btn btn-sm btn-primary" name="listRender"><i class="glyphicon glyphicon-search"></i> 조회</button></li>
+		            	<li> <button class="btn btn-sm btn-primary" name="addData"><i class="glyphicon glyphicon-plus"></i> 등록</button></li>
+						<li class="pull-right" role="presentation"> <span class="badge"><span name="totalCnt">0</span>건</span></li>
+					</ul>
 	            </p>
             <table name="table01" class="table table-bordered table-condensed table-hover table-striped">
                 <thead>
                 	<tr>
-	                    <th class="text-center" style="width:15%">이름.</th>
+	                    <th class="text-center" style="width:15%">이름</th>
 	                    <th class="text-center" style="width:5%">나이</th>
 	                    <th class="text-center" style="width:17%">이메일</th>
 	                    <th class="text-center" style="width:13%">전화번호</th>
@@ -46,6 +50,22 @@
             </table>
 
         </div>
+  		<div class="center-block" style="width:300px;">
+  			<nav>
+			  <ul class="pagination">
+			    <li>
+			      <a href="javascript:(function(){})()" aria-label="Previous">
+			        <span aria-hidden="true">&laquo;</span>
+			      </a>
+			    </li>
+			    <li>
+			      <a href="javascript:(function(){})()" aria-label="Next">
+			        <span aria-hidden="true">&raquo;</span>
+			      </a>
+			    </li>
+			  </ul>
+			</nav>
+		</div>
 
         </body>
 

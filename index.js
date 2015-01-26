@@ -1,114 +1,178 @@
-﻿	var editMode = "";
-	var editSort = "desc";
-	
-	var btnShow = function(){
-		$("[name=listArea] button").animate({opacity: '1'}, 1000);
-    	$("[name=listArea] button").attr("disabled", false);
-    	
-		return true;
-	}
-	
-	var saveEvent = function(obj){
-    	return function(){
-    		 /* 1. 텍스트박스값을 저장할 json*/
+﻿	$(document).ready(function(){
+		
+		var editMode = "";		//편집여부
+		var sortType = "desc";	//정렬타입
+		
+		/* 버튼 표시 또는 숨김 처리 */
+		var btnShowOrHide = function(){
+			$("[name=listArea] button").animate({opacity: '1'}, 1000);
+	    	$("[name=listArea] button").attr("disabled", false);
+	    	
+		};
+		
+		/* 저장처리 */
+		var saveEvent = function(obj){
+	    	return function(){
+	    		 /* 1. 텍스트박스값을 저장할 json*/
 
-            var rtn = {};
+	            var rtn = {};
 
-            rtn["_id"] 		=  "id" + _.now();
-            rtn["name"] 	= obj.find("input[name=name]").val() ;
-            rtn["age"] 		= obj.find("input[name=age]").val() ;
-            rtn["email"] 	= obj.find("input[name=email]").val() ;
-            rtn["phone"] 	= obj.find("input[name=phone]").val() ;
-            rtn["company"] 	= obj.find("input[name=company]").val() ;
-            rtn["birthday"] = obj.find("input[name=birthday]").val() ;
+	            rtn["_id"] 		= "id" + _.now();
+	            rtn["name"] 	= obj.find("input[name=name]").val() ;
+	            rtn["age"] 		= parseInt(obj.find("input[name=age]").val()) ;
+	            rtn["email"] 	= obj.find("input[name=email]").val() ;
+	            rtn["phone"] 	= obj.find("input[name=phone]").val() ;
+	            rtn["company"] 	= obj.find("input[name=company]").val() ;
+	            rtn["birthday"] = obj.find("input[name=birthday]").val() ;
 
-            /* 2. 배열에 push 합니다. */
-            data.push(rtn);
+	            /* 2. 배열에 push 합니다. */
+	            data.push(rtn);
 
-            /* 3. 리스트를 다시 그립니다. */
-            $("button[name=listRender]").trigger('click');
+	            /* 3. 리스트를 다시 그립니다. */
+	            $("button[name=listRender]").trigger('click');
+	            
+	            editMode = "";
+	            
+	            btnShowOrHide();
+	        	
+	    	}
+	    	
+	    };
+	    
+	    
+	    /* 정렬 처리 */
+		var sortingData = function(findData, npage){
+			var sortingData = "";
+			
+			if(sortType == "desc"){
+				sortingData = _.chain(findData)
+				               .sortBy('age')
+				               .reverse()
+				               .value();
+	        	return makePagingData(sortingData, npage)
+	        	
+	        }else{
+	        	sortingData = _.chain(findData)
+				               .sortBy('age')
+				               .value();
+				return makePagingData(sortingData, npage)
+				
+	        }
+	        
+			
+		};
+		
+		/* 페이징  이벤트 처리 */
+		var pageingEvent = function(idx){
+			return function(){
+				schData(idx);
+			}
+		}
+		
+		/* 페이징  추가 */
+		var recordCnt = 3;
+		var makePagingData = function(sortingData , nPage){
+			console.log("nPage==",nPage);
+			$(".pagination").html("");
+			
+			var startNum = (nPage * recordCnt) - recordCnt;
+			var endNum 	 = nPage * recordCnt;
+
+			var pData =  _.filter(sortingData, function(obj, idx){ 
+				return idx>=startNum && idx<endNum;
+			});
+			var pDataLen = sortingData.length;
+			var showPageNum = pDataLen / recordCnt;
+			showPageNum = pDataLen % recordCnt > 0 ? showPageNum + 1 : showPageNum;
+
+			if(showPageNum){
+				var $pagingPrev = $('<li>'
+							     +' <a href="javascript:(function(){})()" aria-label="Previous">'
+							     +'   <span aria-hidden="true">&laquo;</span>'
+							     +' </a>'
+							     +'</li>'
+							     ).click(pageingEvent(1));
+				$(".pagination").append($pagingPrev);
+				
+				for(var i=1, mLen=parseInt(showPageNum); i<=mLen; i++){
+					$(".pagination").append($("<li><a href=\"javascript:(function(){})()\">"+i+"</a></li>").click(pageingEvent(i)));
+						
+				}
+				
+				var pagingNext =  $('<li>'
+							      +' <a href="javascript:(function(){})()" aria-label="Next">'
+							      +'   <span aria-hidden="true">&raquo;</span>'
+							      +' </a>'
+							      +'</li>').click(pageingEvent(parseInt(showPageNum)));
+				
+				$(".pagination").append(pagingNext);
+			
+			}
+
+			return pData;
+		};
+		
+		/* 조회 처리 */
+    	var schData = function(nPage){
+    		$("table[name=table01] tbody").html("");
+    		
+    		var findData = data;
+			if($("input[name=schAge]").val() != "")findData = _.where(data, {age:parseInt($("input[name=schAge]").val())});
+			
+			$("span[name=totalCnt]").html(findData.length);
+			
+    		_.each(sortingData(findData, nPage), function(obj){
+
+                var $tr = $("<tr>"
+                +   "<td class=\"text-left\">"+obj.name+"</td>"
+                +   "<td class=\"text-center\">"+obj.age+"</td>"
+                +   "<td class=\"text-left\">"+obj.email+"</td>"
+                +   "<td class=\"text-left\">"+obj.phone+"</td>"
+                +   "<td class=\"text-left\">"+obj.company+"</td>"
+                +   "<td class=\"text-center\">"+obj.birthday+"</td>"
+                +   "<td class=\"text-center\"><button class=\"btn btn-sm \" name=\"delete\"><i class=\"glyphicon glyphicon-trash\"></i></button></td>"
+                +   "</tr>");
+
+            
+                /* 삭제 */
+                $tr.find("button[name=delete]").click(function(){
+                	if(confirm("삭제하시겠습니까?")){
+	                	data = _.reject(data, function(rejObj){ 
+	                		
+	                		return _.isEqual(rejObj, obj); 
+	                	});
+	                	
+	                	$("button[name=listRender]").trigger('click');
+	                	
+                	}
+                	
+                });
+                
+                $tr.appendTo("table[name=table01] tbody");
+
+            });
             
             editMode = "";
-            
-            btnShow();
-        	
-    	}
-    }
-    
-	var sortingData = function(){
-		if(editSort == "desc"){
-        	return _.chain(data)
-                    .sortBy('age')
-                    .reverse()
-                    .value();
-        	
-        }else{
-        	return _.chain(data)
-        	       	.sortBy('age')
-        	        .value();
-        }
-        
-		
-	}
-	
-    $(document).ready(function(){
-    	var schData = function(){
+			
     		
-    		return (function(){
-			    		$("table[name=table01] tbody").html("");
-			    		
-			    		_.each(sortingData(), function(obj){
-			
-			                var $tr = $("<tr>"
-			                +   "<td class=\"text-left\">"+obj.name+"</td>"
-			                +   "<td class=\"text-center\">"+obj.age+"</td>"
-			                +   "<td class=\"text-left\">"+obj.email+"</td>"
-			                +   "<td class=\"text-left\">"+obj.phone+"</td>"
-			                +   "<td class=\"text-left\">"+obj.company+"</td>"
-			                +   "<td class=\"text-center\">"+obj.birthday+"</td>"
-			                +   "<td class=\"text-center\"><button class=\"btn btn-sm \" name=\"delete\"><i class=\"glyphicon glyphicon-trash\"></i></button></td>"
-			                +   "</tr>");
-			
-			            
-			                /* 삭제 */
-			                $tr.find("button[name=delete]").click(function(){
-			                	if(confirm("삭제하시겠습니까?")){
-				                	data = _.reject(data, function(rejObj){ 
-				                		
-				                		return _.isEqual(rejObj, obj); 
-				                	});
-				                	
-				                	$("button[name=listRender]").trigger('click');
-				                	
-			                	}
-			                	
-			                });
-			                
-			                $tr.appendTo("table[name=table01] tbody");
-			
-			            });
-			            
-			            editMode = "";
-			    		}
-	    		)();
-    	};
+	    };
     	
     	/* 정렬 */
         $("table > thead > tr >th:eq(1)").click(function(){
         	
         	if($("table[name=table01] tbody tr").length > 0){
 	        	if($("[name=listRender]").attr("disabled") == undefined  || $("[name=listRender]").attr("disabled") == "false"){ 
-		        	if(editSort == "desc"){
+		        	if(sortType == "desc"){
 		        		$(this).html("나이<i class=\"glyphicon glyphicon-arrow-up\"></i>");
-		        		editSort = "asc";
+		        		sortType = "asc";
 		        		
 		        	}else{
 		        		$(this).html("나이<i class=\"glyphicon glyphicon-arrow-down\"></i>");
-		        		editSort = "desc";
+		        		sortType = "desc";
 		        		
 		        	}
 		        	
-		        	schData();
+		        	schData(1);
 		        	
 	        	}
 	        	
@@ -118,11 +182,10 @@
         
     	/* 조회 */
         $("button[name=listRender]").click(function(){
-
         	$("table > thead > tr >th:eq(1)").html("나이");
-        	editSort = "desc";
-        	
-            schData();
+        	sortType = "desc";
+
+        	schData(1);
 
         });
 
@@ -154,7 +217,7 @@
 	             $tr.find("button[name=cancle]").click(function(){
 	            	 $("table[name=table01] tbody tr:eq(0)").remove();
 	            	 editMode = "";
-	            	 btnShow();
+	            	 btnShowOrHide();
 	             });
 	             
 	             if($("table[name=table01] tbody tr").length){
@@ -170,7 +233,7 @@
         	
         });
 
-    });
+	});
 
     
     
