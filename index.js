@@ -186,7 +186,6 @@
                 /* 수정처리 */
                 $tr.find("button[name=doUpdate]").click(function(){
                 	_.each(data, function(updObj){
-                		console.log(updObj._id,"===", obj._id);
                 		if(updObj._id == obj._id){
                 			updObj.name = $("input[name=updName]").val();
                 		}
