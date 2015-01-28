@@ -18,14 +18,14 @@
 		/* 저장처리 */
 		var saveEvent = function(obj){
 	    	return function(){
-	    		 /* 1. 텍스트박스값을 저장할 json*/
-
 	    		var $age = obj.find("input[name=age]");
 	    		if($age.val() == ""){
+	    			alert("나이는 필수 입력입니다.");
 	    			$age.focus();
-	    			return alert("나이는 필수 입력입니다.");
+	    			return false;
 	    		};
 	    		
+	    		 /* 1. 텍스트박스값을 저장할 json*/
 	            var rtn = {};
 
 	            rtn["_id"] 		= "id" + _.now();
