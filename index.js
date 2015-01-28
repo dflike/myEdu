@@ -20,11 +20,17 @@
 	    	return function(){
 	    		 /* 1. 텍스트박스값을 저장할 json*/
 
+	    		var $age = obj.find("input[name=age]");
+	    		if($age.val() == ""){
+	    			$age.focus();
+	    			return alert("나이는 필수 입력입니다.");
+	    		};
+	    		
 	            var rtn = {};
 
 	            rtn["_id"] 		= "id" + _.now();
 	            rtn["name"] 	= obj.find("input[name=name]").val() ;
-	            rtn["age"] 		= parseInt(obj.find("input[name=age]").val()) ;
+	            rtn["age"] 		= parseInt($age.val()) ;
 	            rtn["email"] 	= obj.find("input[name=email]").val() ;
 	            rtn["phone"] 	= obj.find("input[name=phone]").val() ;
 	            rtn["company"] 	= obj.find("input[name=company]").val() ;
@@ -202,7 +208,7 @@
         	if(editMode == ""){
 	        	 var $tr = $("<tr>"
 	             +   "<td class=\"text-center\"><input style=\"width:150px\" type=\"text\" name=\"name\" placeholder=\"이름\"/></td>"
-	             +   "<td class=\"text-center\"><input style=\"width:40px\" type=\"text\" name=\"age\" placeholder=\"나이\" maxlength=\"2\" class=\"numberOnly\"/></td>"
+	             +   "<td class=\"text-center\"><span style=\"color:red\">*</span>&nbsp<input style=\"width:40px\" type=\"text\" name=\"age\" placeholder=\"나이\" maxlength=\"2\" class=\"numberOnly\"/></td>"
 	             +   "<td class=\"text-center\"><input style=\"width:210px\" type=\"text\" name=\"email\" placeholder=\"이메일\"/></td>"
 	             +   "<td class=\"text-center\"><input style=\"width:150px\" type=\"text\" name=\"phone\" placeholder=\"전화번호\"/></td>"
 	             +   "<td class=\"text-center\"><input style=\"width:340px\" type=\"text\" name=\"company\" placeholder=\"회사\"/></td>"
