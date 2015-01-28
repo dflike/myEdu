@@ -208,7 +208,7 @@
         	if(editMode == ""){
 	        	 var $tr = $("<tr>"
 	             +   "<td class=\"text-center\"><input style=\"width:150px\" type=\"text\" name=\"name\" placeholder=\"이름\"/></td>"
-	             +   "<td class=\"text-center\"><span style=\"color:red\">*</span>&nbsp<input style=\"width:40px\" type=\"text\" name=\"age\" placeholder=\"나이\" maxlength=\"2\" class=\"numberOnly\"/></td>"
+	             +   "<td class=\"text-center\"><code style=\"padding:0px 0px\">*</code>&nbsp<input style=\"width:40px\" type=\"text\" name=\"age\" placeholder=\"나이\" maxlength=\"2\" class=\"numberOnly\"/></td>"
 	             +   "<td class=\"text-center\"><input style=\"width:210px\" type=\"text\" name=\"email\" placeholder=\"이메일\"/></td>"
 	             +   "<td class=\"text-center\"><input style=\"width:150px\" type=\"text\" name=\"phone\" placeholder=\"전화번호\"/></td>"
 	             +   "<td class=\"text-center\"><input style=\"width:340px\" type=\"text\" name=\"company\" placeholder=\"회사\"/></td>"
