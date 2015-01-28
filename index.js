@@ -9,7 +9,7 @@
 		});
 		
 		/* 버튼 표시 또는 숨김 처리 */
-		var btnShowOrHide = function(){
+		var btnShow = function(){
 			$("[name=listArea] button").animate({opacity: '1'}, 1000);
 	    	$("[name=listArea] button").attr("disabled", false);
 	    	
@@ -44,7 +44,7 @@
 	            
 	            editMode = "";
 	            
-	            btnShowOrHide();
+	            btnShow();
 	        	
 	    	}
 	    	
@@ -140,10 +140,76 @@
                 +   "<td class=\"text-left\">"+obj.phone+"</td>"
                 +   "<td class=\"text-left\">"+obj.company+"</td>"
                 +   "<td class=\"text-center\">"+obj.birthday+"</td>"
-                +   "<td class=\"text-center\"><button class=\"btn btn-sm \" name=\"delete\"><i class=\"glyphicon glyphicon-trash\"></i></button></td>"
+                +   "<td class=\"text-center\">"
+                +		"<button class=\"btn btn-sm btnAni\" name=\"update\" ><i class=\"glyphicon glyphicon-pencil\"></i></button>"
+                +		"<button class=\"btn btn-sm \" name=\"doUpdate\" style='display:none'><i class=\"glyphicon glyphicon-ok\"></i></button>"
+                +		"<button class=\"btn btn-sm \" name=\"updCancel\" style='display:none; margin-left:5px;'><i class=\"glyphicon glyphicon-remove\"></i></button>"
+                +		"<button class=\"btn btn-sm btnAni\" name=\"delete\" style=\"margin-left:5px;\"><i class=\"glyphicon glyphicon-trash\"></i></button>"
+                +	"</td>"
                 +   "</tr>");
 
             
+                /* 수정 */
+                $tr.find("button[name=update]").click(function(){
+                	
+                	$tr.find("button[name=update]").hide();
+                	$tr.find("button[name=delete]").hide();
+                	
+                	$(".btnAni").animate({opacity: '0'}, 1000);
+                	$(".btnAni").attr("disabled", true);
+                	
+                	$tr.find("button[name=doUpdate]").show();
+                	$tr.find("button[name=updCancel]").show();
+                	
+                	$tr.find("td").eq(0).html('');
+                	$tr.find("td").eq(0).html("<input style=\"width:150px\" type=\"text\" name=\"updName\" placeholder=\"이름\" value=\""+obj.name+"\"/>");
+                });
+                
+                /* 수정취소 */
+                $tr.find("button[name=updCancel]").click(function(){
+
+                	$tr.find("button[name=doUpdate]").hide();
+                	$tr.find("button[name=updCancel]").hide();
+                	
+                	$tr.find("button[name=update]").show();
+                	$tr.find("button[name=delete]").show();
+                	
+                	$(".btnAni").animate({opacity: '1'}, 1000);
+                	$(".btnAni").attr("disabled", false);
+                	
+                	var updName = $("input[name=updName]").val();
+                	$tr.find("td").eq(0).html('');
+                	$tr.find("td").eq(0).html(updName);
+                	
+                });
+                
+                /* 수정처리 */
+                $tr.find("button[name=doUpdate]").click(function(){
+                	_.each(data, function(updObj){
+                		console.log(updObj._id,"===", obj._id);
+                		if(updObj._id == obj._id){
+                			updObj.name = $("input[name=updName]").val();
+                		}
+                		
+                	});
+                	
+                	$tr.find("button[name=doUpdate]").hide();
+                	$tr.find("button[name=updCancel]").hide();
+                	
+                	$tr.find("button[name=update]").show();
+                	$tr.find("button[name=delete]").show();
+                	
+                	$(".btnAni").animate({opacity: '1'}, 1000);
+                	$(".btnAni").attr("disabled", false);
+                	
+                	
+                	var updName = $("input[name=updName]").val();
+                	$tr.find("td").eq(0).html('');
+                	$tr.find("td").eq(0).html(updName);
+                	
+                });
+                
+                
                 /* 삭제 */
                 $tr.find("button[name=delete]").click(function(){
                 	if(confirm("삭제하시겠습니까?")){
@@ -214,8 +280,8 @@
 	             +   "<td class=\"text-center\"><input style=\"width:340px\" type=\"text\" name=\"company\" placeholder=\"회사\"/></td>"
 	             +   "<td class=\"text-center\"><input style=\"width:100px\" type=\"text\" name=\"birthday\" placeholder=\"샏년월일\"/></td>"
 	             +   "<td class=\"text-center\">"
-	             +	 "<button class=\"btn btn-sm \" name=\"save\"><i class=\"glyphicon glyphicon-ok\"></i></button>&nbsp"
-	             +	 "<button class=\"btn btn-sm \" name=\"cancle\"><i class=\"glyphicon glyphicon-remove\"></i></button>"
+	             +	 "<button class=\"btn btn-sm \" name=\"save\"><i class=\"glyphicon glyphicon-ok\"></i></button>"
+	             +	 "<button class=\"btn btn-sm \" name=\"cancle\" style=\"margin-left:5px;\"><i class=\"glyphicon glyphicon-remove\"></i></button>"
 	             +   "</td>"
 	             +   "</tr>");
 	
@@ -227,7 +293,7 @@
 	             $tr.find("button[name=cancle]").click(function(){
 	            	 $("table[name=table01] tbody tr:eq(0)").remove();
 	            	 editMode = "";
-	            	 btnShowOrHide();
+	            	 btnShow();
 	             });
 	             
 	             if($("table[name=table01] tbody tr").length){
